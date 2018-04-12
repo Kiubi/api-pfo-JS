@@ -27,8 +27,9 @@ L'accès au sandbox est privé et nécessite un compte back-office. Seul le lien
 
 La librairie doit être inclue dans les templates de page du thème, après l'inclusion de jQuery, afin de pouvoir utiliser l'API de façon globale ou directement dans un widget :
 
-	<script type="text/javascript" src="https://cdn.kiubi-web.com/js/kiubi.api.pfo.jquery-1.1.min.js"></script>
+	<script type="text/javascript" src="{cdn}/js/kiubi.api.pfo.jquery-1.1.min.js"></script>
 	
+La balise `{cdn}` affiche l'url du du CDN de la plateforme.
 	
 ## Utilisation
 
@@ -162,7 +163,7 @@ Voici par service la liste des méthodes disponibles dans le client JS :
 ## Exemples
 
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-	<script type="text/javascript" src="https://cdn.kiubi-web.com/js/kiubi.api.pfo.jquery-1.1.min.js"></script>
+	<script type="text/javascript" src="{cdn}/js/kiubi.api.pfo.jquery-1.1.min.js"></script>
 	<script type="text/javascript">
 		jQuery(function($){
 		

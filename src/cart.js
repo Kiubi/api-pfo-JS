@@ -116,13 +116,31 @@
 			return kiubi.get('cart/carriers');
 		},
 		/**
+		 * Teste la disponibilité d'un date de livraison
+		 * 
+		 * @param Integer id
+		 * @param String scheduled_date
+		 * @param String scheduled_hour
+		 * @return Promise
+		 */
+		testCarrierSchedule: function(id, scheduled_date, scheduled_hour) {
+			var qs = {scheduled_date: scheduled_date};
+			if (scheduled_hour) qs.scheduled_hour = scheduled_hour;
+			return kiubi.get('cart/carriers/'+id+'/schedule', qs);
+		},		
+		/**
 		 * Définis un transporteur
 		 * 
 		 * @param Integer id
+		 * @param String scheduled_date
+		 * @param String scheduled_hour
 		 * @return Promise
 		 */
-		setShipping: function(id) {
-			return kiubi.put('cart/shipping', {carrier_id: id});
+		setShipping: function(id, scheduled_date, scheduled_hour) {
+			var qs = {carrier_id: id};
+			if (scheduled_date) qs.scheduled_date = scheduled_date;
+			if (scheduled_hour) qs.scheduled_hour = scheduled_hour;
+			return kiubi.put('cart/shipping', qs);
 		},
 		/**
 		 * Définis les adresses de facturation et livraison

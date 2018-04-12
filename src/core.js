@@ -1,5 +1,5 @@
 /** 
- * Kiubi API - jQuery Client v1.0.1
+ * Kiubi API - jQuery Client v1.0.2
  * 
  * Copyright 2018 Kiubi
  */
@@ -13,7 +13,7 @@ kiubi = window.kiubi || {};
 	$.extend(kiubi, {
 	
 		api_version: 1,
-		js_version: '1.0.1',
+		js_version: '1.0.2',
 		base: '/api/',
 		
 		media: {},

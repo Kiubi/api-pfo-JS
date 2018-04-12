@@ -1,7 +1,7 @@
 /** 
  * API Forms
  * 
- * Copyright 2013 Troll d'idees
+ * Copyright 2018 Kiubi
  */
 (function($, kiubi) {
 	
@@ -123,6 +123,9 @@
 			}
 			
 			data = $form.serialize();
+			// mapping consentement_ok => consent
+			data.consent = data.consentement_ok;
+			delete data.consentement_ok;
 			return kiubi.post(endpoint, data);
 		},
 		/**

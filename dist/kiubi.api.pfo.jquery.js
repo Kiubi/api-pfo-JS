@@ -1,5 +1,5 @@
 /** 
- * Kiubi API - jQuery Client v1.0.2
+ * Kiubi API - jQuery Client v1.1
  * 
  * Copyright 2018 Kiubi
  */
@@ -13,7 +13,7 @@ kiubi = window.kiubi || {};
 	$.extend(kiubi, {
 	
 		api_version: 1,
-		js_version: '1.0.2',
+		js_version: '1.1',
 		base: '/api/',
 		
 		media: {},
@@ -399,7 +399,7 @@ kiubi = window.kiubi || {};
 /** 
  * API Blog
  * 
- * Copyright 2013 Troll d'idees
+ * Copyright 2018 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -568,14 +568,16 @@ kiubi = window.kiubi || {};
 		 * @param String email
 		 * @param String website
 		 * @param String captcha
+		 * @param String consent
 		 * @return Promise
 		 */
-		addComment: function(id, comment, author, email, website, captcha) {
+		addComment: function(id, comment, author, email, website, captcha, consent) {
 			var qs = {id: id, comment: comment};
 			if(author) qs.author = author;
 			if(email) qs.email = email;
 			if(website) qs.website = website;
 			if(captcha) qs.captcha = captcha;
+			if(consent) qs.consent = consent;
 			return kiubi.post('blog/posts/'+id+'/comments');
 		}
 	});
@@ -729,15 +731,19 @@ kiubi = window.kiubi || {};
 		 * 
 		 * @param Object billing
 		 * @param Object shipping
+		 * @param Boolean consent
 		 * @return Promise
 		 */
-		setAdresses: function(billing, shipping) {
+		setAdresses: function(billing, shipping, consent) {
 			var qs = {billing: billing};
 			if(shipping) {
 				qs.shipping = shipping;
 				qs.use_billing_as_shipping = false;
 			} else {
 				qs.use_billing_as_shipping = true;
+			}
+			if(consent) {
+				qs.consent = consent;
 			}
 			return kiubi.put('cart/addresses', qs);
 		},
@@ -771,7 +777,7 @@ kiubi = window.kiubi || {};
 /** 
  * API Catalog
  * 
- * Copyright 2013 Troll d'idees
+ * Copyright 2018 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -889,13 +895,15 @@ kiubi = window.kiubi || {};
 		 * @param String author
 		 * @param String rate
 		 * @param String captcha
+		 * @param String consent
 		 * @return Promise
 		 */
-		addComment: function(id, comment, author, rate, captcha) {
+		addComment: function(id, comment, author, rate, captcha, consent) {
 			var qs = {id: id, comment: comment};
 			if(author) qs.author = author;
 			if(rate) qs.rate = rate;
 			if(captcha) qs.captcha = captcha;
+			if(consent) qs.consent = consent;
 			return kiubi.post('catalog/products/'+id+'/comments');
 		},
 		/**
@@ -1018,7 +1026,7 @@ kiubi = window.kiubi || {};
 /** 
  * API Forms
  * 
- * Copyright 2013 Troll d'idees
+ * Copyright 2018 Kiubi
  */
 (function($, kiubi) {
 	
@@ -1140,6 +1148,9 @@ kiubi = window.kiubi || {};
 			}
 			
 			data = $form.serialize();
+			// mapping consentement_ok => consent
+			data.consent = data.consentement_ok;
+			delete data.consentement_ok;
 			return kiubi.post(endpoint, data);
 		},
 		/**
@@ -1205,7 +1216,7 @@ kiubi = window.kiubi || {};
 /** 
  * API Newsletter
  * 
- * Copyright 2013 Troll d'idees
+ * Copyright 2018 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -1214,10 +1225,13 @@ kiubi = window.kiubi || {};
 		 * Inscrit un email à la newsletter
 		 * 
 		 * @param String email
+		 * @param Boolean consent
 		 * @return Promise
 		 */
-		subscribe: function(email) {
-			return kiubi.post('newsletter', {newsletter: email});
+		subscribe: function(email, consent) {
+			var qs = {newsletter: email};
+			if (consent) qs.consent = consent;
+			return kiubi.post('newsletter', qs);
 		},
 		/**
 		 * Désinscrit un email à la newsletter

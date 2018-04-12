@@ -1,7 +1,7 @@
 /** 
  * API Catalog
  * 
- * Copyright 2013 Troll d'idees
+ * Copyright 2018 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -119,13 +119,15 @@
 		 * @param String author
 		 * @param String rate
 		 * @param String captcha
+		 * @param String consent
 		 * @return Promise
 		 */
-		addComment: function(id, comment, author, rate, captcha) {
+		addComment: function(id, comment, author, rate, captcha, consent) {
 			var qs = {id: id, comment: comment};
 			if(author) qs.author = author;
 			if(rate) qs.rate = rate;
 			if(captcha) qs.captcha = captcha;
+			if(consent) qs.consent = consent;
 			return kiubi.post('catalog/products/'+id+'/comments');
 		},
 		/**

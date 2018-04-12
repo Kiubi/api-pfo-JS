@@ -147,15 +147,19 @@
 		 * 
 		 * @param Object billing
 		 * @param Object shipping
+		 * @param Boolean consent
 		 * @return Promise
 		 */
-		setAdresses: function(billing, shipping) {
+		setAdresses: function(billing, shipping, consent) {
 			var qs = {billing: billing};
 			if(shipping) {
 				qs.shipping = shipping;
 				qs.use_billing_as_shipping = false;
 			} else {
 				qs.use_billing_as_shipping = true;
+			}
+			if(consent) {
+				qs.consent = consent;
 			}
 			return kiubi.put('cart/addresses', qs);
 		},

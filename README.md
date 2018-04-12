@@ -17,7 +17,9 @@ L'accès au sandbox est privé et nécessite un compte back-office. Seul le lien
 
 ## Pré-requis
 
-- jQuery 1.8.2
+- jQuery >= 1.8.2
+
+*Le thème Bootstrap fournit par Kiubi intègre jQuery 3.2.1*	
 
 *Le thème Shiroi fournit par Kiubi intègre jQuery 1.8.2*	
 
@@ -25,7 +27,7 @@ L'accès au sandbox est privé et nécessite un compte back-office. Seul le lien
 
 La librairie doit être inclue dans les templates de page du thème, après l'inclusion de jQuery, afin de pouvoir utiliser l'API de façon globale ou directement dans un widget :
 
-	<script type="text/javascript" src="http://cdn.kiubi-web.com/js/kiubi.api.pfo.jquery-1.0.min.js"></script>
+	<script type="text/javascript" src="https://cdn.kiubi-web.com/js/kiubi.api.pfo.jquery-1.1.min.js"></script>
 	
 	
 ## Utilisation
@@ -89,7 +91,7 @@ Voici par service la liste des méthodes disponibles dans le client JS :
     - getCaptcha(id) : Retourne un captcha pour un billet
     - getComments(opts) : Retourne la liste des commmentaires
     - getPostComments(id, opts) : Retourne la liste des commentaires d'un billet
-    - addComment(id, comment, author, email, website, captcha) : Poste un commentaire sur un billet
+    - addComment(id, comment, author, email, website, captcha, consent) : Poste un commentaire sur un billet
 - kiubi.cart
     - get(opts) : Retourne le panier
     - empty() : Vide le panier
@@ -102,8 +104,9 @@ Voici par service la liste des méthodes disponibles dans le client JS :
     - backup() : Récupère une sauvegarde du panier
     - restore(backup) : Restaure une sauvegarde du panier
     - getCarriers() : Retourne la liste des transporteurs disponibles
-    - setShipping(id) : Définis un transporteur
-    - setAdresses(billing, shipping) : Définis les adresses de facturation et livraison
+	- testCarrierSchedule: function(id, scheduled_date, scheduled_hour) : Teste la disponibilité d'un date de livraison
+    - setShipping(id, scheduled_date, scheduled_hour) : Définis un transporteur
+    - setAdresses(billing, shipping, consent) : Définis les adresses de facturation et livraison
     - getAdresses() : Retourne les adresses de facturation et livraison
 - kiubi.catalog
     - getProducts(opts) : Retourne la liste des produits
@@ -116,7 +119,7 @@ Voici par service la liste des méthodes disponibles dans le client JS :
     - getProduct(id, opts) : Retourne le détail d'un produit
     - getProductComments(id, opts) : Retourne la liste des commentaires d'un produits
     - getCaptcha(id) : Retourne un captcha pour un produit
-    - addComment(id, comment, author, rate, captcha) : Poste un commentaire produit
+    - addComment(id, comment, author, rate, captcha, consent) : Poste un commentaire produit
     - getLinkedProducts(id, opts) : Retourne la liste des produits associés à un produit
     - getAlsoBoughtProducts(id, opts) : Retourne la liste des produits également achetés d'un produit
     - getProductImages(id, opts) : Retourne la liste des images d'un produit
@@ -138,7 +141,7 @@ Voici par service la liste des méthodes disponibles dans le client JS :
     - getFiles(key, opts) : Retourne la liste des médias d'un dossier
     - getFile(id) : Retourne le détail d'un média
 - kiubi.newsletter
-    - subscribe(email) : Inscrit un email à la newsletter
+    - subscribe(email, consent) : Inscrit un email à la newsletter
     - unsubscribe(email) : Désinscrit un email à la newsletter
 - kiubi.prefs
     - medias() : Retourne les préférences de la médiathèque
@@ -158,8 +161,8 @@ Voici par service la liste des méthodes disponibles dans le client JS :
 
 ## Exemples
 
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-	<script type="text/javascript" src="http://cdn.kiubi-web.com/js/kiubi.api.pfo.jquery-1.0.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdn.kiubi-web.com/js/kiubi.api.pfo.jquery-1.1.min.js"></script>
 	<script type="text/javascript">
 		jQuery(function($){
 		
@@ -190,5 +193,4 @@ Chaque requête retourne un objet `Promise` qui gère deux méthodes `done()`et 
 
 Il est possible de définir plusieurs callbacks `done()` et `fail()` sur une requête afin d'effectuer plusieurs actions différentes.
 
-Il existe également une méthode `always()` qui est appelé dans tous les cas, si la requête se déroule correctement ou si elle échoue.
-
+Il existe également une méthode `always()` qui est appelée dans tous les cas, si la requête se déroule correctement ou si elle échoue.

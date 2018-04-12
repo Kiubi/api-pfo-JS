@@ -1,7 +1,7 @@
 /** 
  * API Blog
  * 
- * Copyright 2013 Troll d'idees
+ * Copyright 2018 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -170,14 +170,16 @@
 		 * @param String email
 		 * @param String website
 		 * @param String captcha
+		 * @param String consent
 		 * @return Promise
 		 */
-		addComment: function(id, comment, author, email, website, captcha) {
+		addComment: function(id, comment, author, email, website, captcha, consent) {
 			var qs = {id: id, comment: comment};
 			if(author) qs.author = author;
 			if(email) qs.email = email;
 			if(website) qs.website = website;
 			if(captcha) qs.captcha = captcha;
+			if(consent) qs.consent = consent;
 			return kiubi.post('blog/posts/'+id+'/comments');
 		}
 	});

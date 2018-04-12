@@ -1,7 +1,7 @@
 /** 
  * API Cart
  * 
- * Copyright 2013 Troll d'idees
+ * Copyright 2018 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -148,6 +148,23 @@
 		 */
 		getAdresses: function() {
 			return kiubi.get('cart/addresses');
+		},
+		/**
+		 * Retourne le commentaire sur la commande
+		 * 
+		 * @return Promise
+		 */
+		getComment: function() {
+			return kiubi.get('cart/comment');
+		},
+		/**
+		 * Ajoute un commentaire sur la commande
+		 * 
+		 * @param String comment
+		 * @return Promise
+		 */
+		setComment: function(comment) {
+			return kiubi.put('cart/comment', {comment:comment});
 		}
 	});
 })(jQuery, kiubi);

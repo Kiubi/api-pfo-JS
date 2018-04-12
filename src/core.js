@@ -1,7 +1,7 @@
 /** 
- * Kiubi API - jQuery Client v1.0
+ * Kiubi API - jQuery Client v1.0.1
  * 
- * Copyright 2013 Troll d'idees
+ * Copyright 2018 Kiubi
  */
 kiubi = window.kiubi || {};
 (function($, kiubi) {
@@ -13,7 +13,7 @@ kiubi = window.kiubi || {};
 	$.extend(kiubi, {
 	
 		api_version: 1,
-		js_version: '1.0',
+		js_version: '1.0.1',
 		base: '/api/',
 		
 		media: {},

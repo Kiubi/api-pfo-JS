@@ -1,7 +1,7 @@
 /** 
  * API Catalog
  * 
- * Copyright 2018 Kiubi
+ * Copyright 2019 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -128,7 +128,7 @@
 			if(rate) qs.rate = rate;
 			if(captcha) qs.captcha = captcha;
 			if(consent) qs.consent = consent;
-			return kiubi.post('catalog/products/'+id+'/comments');
+			return kiubi.post('catalog/products/'+id+'/comments', qs);
 		},
 		/**
 		 * Retourne la liste des produits associés à un produit

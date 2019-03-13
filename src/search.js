@@ -1,7 +1,7 @@
 /** 
  * API Search
  * 
- * Copyright 2013 Troll d'idees
+ * Copyright 2019 Kiubi
  */
 (function($, kiubi) {
 	'use strict';

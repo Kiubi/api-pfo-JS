@@ -1,7 +1,7 @@
 /** 
  * API Newsletter
  * 
- * Copyright 2018 Kiubi
+ * Copyright 2019 Kiubi
  */
 (function($, kiubi) {
 	'use strict';

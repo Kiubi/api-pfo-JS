@@ -1,7 +1,7 @@
 /** 
- * Kiubi API - jQuery Client v1.1
+ * Kiubi API - jQuery Client v1.2
  * 
- * Copyright 2018 Kiubi
+ * Copyright 2019 Kiubi
  */
 kiubi = window.kiubi || {};
 (function($, kiubi) {
@@ -13,19 +13,20 @@ kiubi = window.kiubi || {};
 	$.extend(kiubi, {
 	
 		api_version: 1,
-		js_version: '1.1',
+		js_version: '1.2',
 		base: '/api/',
 		
-		media: {},
+        blog: {},
+        cart: {},
 		catalog: {},
-		users: {},
+		cms: {},
+        forms: {},
+        geo: {},
+        media: {},
 		newsletter: {},
 		prefs: {},
 		search: {},
-		forms: {},
-		cms: {},
-		blog: {},
-		cart: {},
+		users: {},
 		
 		/**
 		 * Effectue une requête concrète vers l'api 
@@ -142,6 +143,16 @@ kiubi = window.kiubi || {};
 		 */
 		logout: function() {
 			return this['delete']('session');
+		},
+        
+        /**
+		 * Vérifie la validité de la session et retourne les informations de 
+         * l'utilisateur connecté.
+		 * 
+		 * @return Promise
+		 */
+		getSession: function() {
+			return this.get('session');
 		},
 		
 		/**

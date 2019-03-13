@@ -1,7 +1,7 @@
 /** 
  * API Cart
  * 
- * Copyright 2018 Kiubi
+ * Copyright 2019 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -61,6 +61,38 @@
 		 */
 		removeItem: function(id) {
 			return kiubi['delete']('cart/items/'+id);
+		},
+        /**
+		 * Récupère les options à la commande
+         *
+         * @param Object opts
+		 * @return Promise
+		 */
+		getOptions: function(opts) {
+            var qs = opts || {};
+			return kiubi.get('cart/options', qs);
+		},
+        /**
+		 * Ajoute une option à la commande
+		 * 
+		 * @param Object items
+		 * @param Integer mode
+		 * @param Object opts
+		 * @return Promise
+		 */
+		addOption: function(id, value, opts) {
+			var qs = opts || {};
+			qs.value = value;
+			return kiubi.put('cart/options/'+id, qs);
+		},
+		/**
+		 * Supprime une option à la commande 
+		 * 
+		 * @param Integer id
+		 * @return Promise
+		 */
+		removeOption: function(id) {
+			return kiubi['delete']('cart/options/'+id);
 		},
 		/**
 		 * Récupère le bon de réduction

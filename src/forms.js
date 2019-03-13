@@ -1,7 +1,7 @@
 /** 
  * API Forms
  * 
- * Copyright 2018 Kiubi
+ * Copyright 2019 Kiubi
  */
 (function($, kiubi) {
 	
@@ -136,25 +136,6 @@
 		 */
 		getFormCaptcha: function(key) {
 			return kiubi.get('forms/'+key+'/captcha');
-		},
-		/**
-		 * Retourne un captcha
-		 * 
-		 * @return Promise
-		 */
-		getCaptcha: function() {
-			return kiubi.get('forms/captcha');
-		},
-		/**
-		 * Valide un captcha
-		 * 
-		 * @param String key
-		 * @param String value
-		 * @return Promise
-		 */
-		submitCaptcha: function(key, value) {
-			return kiubi.put('forms/captcha', {key: key, value: value});
 		}
-		
 	});
 })(jQuery, kiubi);

@@ -1,7 +1,7 @@
 /** 
  * API Blog
  * 
- * Copyright 2018 Kiubi
+ * Copyright 2019 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -115,12 +115,10 @@
 		/**
 		 * Retourne la liste liste des archives
 		 * 
-		 * @param Object opts
 		 * @return Promise
 		 */
-		getArchives: function(opts) {
-			var qs =  opts || {};
-			return kiubi.get('blog/archives', qs);
+		getArchives: function() {
+			return kiubi.get('blog/archives');
 		},
 		/**
 		 * Retourne le détail d'un billet
@@ -180,7 +178,7 @@
 			if(website) qs.website = website;
 			if(captcha) qs.captcha = captcha;
 			if(consent) qs.consent = consent;
-			return kiubi.post('blog/posts/'+id+'/comments');
+			return kiubi.post('blog/posts/'+id+'/comments', qs);
 		}
 	});
 })(jQuery, kiubi);

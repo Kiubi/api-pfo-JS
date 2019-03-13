@@ -1,7 +1,7 @@
 /** 
- * Kiubi API - jQuery Client v1.1
+ * Kiubi API - jQuery Client v1.2
  * 
- * Copyright 2018 Kiubi
+ * Copyright 2019 Kiubi
  */
 kiubi = window.kiubi || {};
 (function($, kiubi) {
@@ -13,19 +13,20 @@ kiubi = window.kiubi || {};
 	$.extend(kiubi, {
 	
 		api_version: 1,
-		js_version: '1.1',
+		js_version: '1.2',
 		base: '/api/',
 		
-		media: {},
+        blog: {},
+        cart: {},
 		catalog: {},
-		users: {},
+		cms: {},
+        forms: {},
+        geo: {},
+        media: {},
 		newsletter: {},
 		prefs: {},
 		search: {},
-		forms: {},
-		cms: {},
-		blog: {},
-		cart: {},
+		users: {},
 		
 		/**
 		 * Effectue une requête concrète vers l'api 
@@ -142,6 +143,16 @@ kiubi = window.kiubi || {};
 		 */
 		logout: function() {
 			return this['delete']('session');
+		},
+        
+        /**
+		 * Vérifie la validité de la session et retourne les informations de 
+         * l'utilisateur connecté.
+		 * 
+		 * @return Promise
+		 */
+		getSession: function() {
+			return this.get('session');
 		},
 		
 		/**
@@ -399,7 +410,7 @@ kiubi = window.kiubi || {};
 /** 
  * API Blog
  * 
- * Copyright 2018 Kiubi
+ * Copyright 2019 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -513,12 +524,10 @@ kiubi = window.kiubi || {};
 		/**
 		 * Retourne la liste liste des archives
 		 * 
-		 * @param Object opts
 		 * @return Promise
 		 */
-		getArchives: function(opts) {
-			var qs =  opts || {};
-			return kiubi.get('blog/archives', qs);
+		getArchives: function() {
+			return kiubi.get('blog/archives');
 		},
 		/**
 		 * Retourne le détail d'un billet
@@ -578,14 +587,199 @@ kiubi = window.kiubi || {};
 			if(website) qs.website = website;
 			if(captcha) qs.captcha = captcha;
 			if(consent) qs.consent = consent;
-			return kiubi.post('blog/posts/'+id+'/comments');
+			return kiubi.post('blog/posts/'+id+'/comments', qs);
+		}
+	});
+})(jQuery, kiubi);
+/** 
+ * API Catalog
+ * 
+ * Copyright 2019 Kiubi
+ */
+(function($, kiubi) {
+	'use strict';
+	$.extend(kiubi.catalog, {
+		/**
+		 * Retourne la liste des produits
+		 * 
+		 * @param Object opts
+		 * @return Promise
+		 */
+		getProducts: function(opts) {
+			var qs = opts || {};
+			return kiubi.get('catalog/products', qs);
+		},
+		/**
+		 * Retourne la liste des produits d'une catégorie
+		 * 
+		 * @param Integer id
+		 * @param Object opts
+		 * @return Promise
+		 */
+		getProductsByCategory: function(id, opts) {
+			var qs = opts || {};
+			return kiubi.get('catalog/categories/'+id+'/products', qs);
+		},
+		/**
+		 * Retourne la liste des produits d'un ou plusieurs tag
+		 * 
+		 * @param String tags
+		 * @param Object opts
+		 * @return Promise
+		 */
+		getProductsByTags: function(tags, opts) {
+			var qs = opts || {};
+			qs.tags = tags;
+			return kiubi.get('catalog/products', qs);
+		},
+		/**
+		 * Retourne la liste des catégories
+		 * 
+		 * @param Object opts
+		 * @return Promise
+		 */
+		getCategories: function(opts) {
+			var qs = opts || {};
+			return kiubi.get('catalog/categories', qs);
+		},
+		/**
+		 * Retourne la liste des tags
+		 * 
+		 * @param Object opts
+		 * @return Promise
+		 */
+		getTags: function(opts) {
+			var qs = opts || {};
+			return kiubi.get('catalog/tags', qs);
+		},
+		/**
+		 * Retourne la liste des tags d'une catégorie
+		 * 
+		 * @param Integer id
+		 * @param Object opts
+		 * @return Promise
+		 */
+		getCategoryTags: function(id, opts) {
+			var qs = opts || {};
+			return kiubi.get('catalog/categories/'+id+'/tags', qs);
+		},
+		/**
+		 * Retourne la liste des commentaires
+		 * 
+		 * @param Object opts
+		 * @return Promise
+		 */
+		getComments: function(opts) {
+			var qs = opts || {};
+			return kiubi.get('catalog/comments', qs);
+		},
+		/**
+		 * Retourne le détail d'un produit
+		 * 
+		 * @param Integer id
+		 * @param Object opts
+		 * @return Promise
+		 */
+		getProduct: function(id, opts) {
+			var qs = opts || {};
+			return kiubi.get('catalog/products/'+id, qs);
+		},		
+		/**
+		 * Retourne la liste des commentaires d'un produits
+		 * 
+		 * @param Integer id
+		 * @param Object opts
+		 * @return Promise
+		 */
+		getProductComments: function(id, opts) {
+			var qs = opts || {};
+			return kiubi.get('catalog/products/'+id+'/comments', qs);
+		},
+		/**
+		 * Retourne un captcha pour un produit
+		 * 
+		 * @param Integer id
+		 * @return Promise
+		 */
+		getCaptcha: function(id) {
+			return kiubi.get('catalog/products/'+id+'/captcha');
+		},
+		/**
+		 * Poste un commentaire produit
+		 * 
+		 * @param Integer id
+		 * @param String comment
+		 * @param String author
+		 * @param String rate
+		 * @param String captcha
+		 * @param String consent
+		 * @return Promise
+		 */
+		addComment: function(id, comment, author, rate, captcha, consent) {
+			var qs = {id: id, comment: comment};
+			if(author) qs.author = author;
+			if(rate) qs.rate = rate;
+			if(captcha) qs.captcha = captcha;
+			if(consent) qs.consent = consent;
+			return kiubi.post('catalog/products/'+id+'/comments', qs);
+		},
+		/**
+		 * Retourne la liste des produits associés à un produit
+		 * 
+		 * @param Integer id
+		 * @param Object opts
+		 * @return Promise
+		 */
+		getLinkedProducts: function(id, opts) {
+			var qs = opts || {};
+			return kiubi.get('catalog/products/'+id+'/linked', qs);
+		},
+		/**
+		 * Retourne la liste des produits également achetés d'un produit
+		 * 
+		 * @param Integer id
+		 * @param Object opts
+		 * @return Promise
+		 */
+		getAlsoBoughtProducts: function(id, opts) {
+			var qs = opts || {};
+			return kiubi.get('catalog/products/'+id+'/alsobought', qs);
+		},
+		/**
+		 * Retourne la liste des images d'un produit
+		 * 
+		 * @param Integer id
+		 * @param Object opts
+		 * @return Promise
+		 */
+		getProductImages: function(id, opts) {
+			var qs = opts || {};
+			return kiubi.get('catalog/products/'+id+'/images', qs);
+		},
+		/**
+		 * Retourne si un produit est disponible ou non
+		 * 
+		 * @param Integer id
+		 * @return Promise
+		 */
+		getProductAvailability: function(id) {
+			return kiubi.get('catalog/products/'+id+'/availability');
+		},
+		/**
+		 * Retourne si une variante est disponible ou non
+		 * 
+		 * @param Integer id
+		 * @return Promise
+		 */
+		getVariantAvailability: function(id) {
+			return kiubi.get('catalog/variants/'+id+'/availability');
 		}
 	});
 })(jQuery, kiubi);
 /** 
  * API Cart
  * 
- * Copyright 2018 Kiubi
+ * Copyright 2019 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -645,6 +839,38 @@ kiubi = window.kiubi || {};
 		 */
 		removeItem: function(id) {
 			return kiubi['delete']('cart/items/'+id);
+		},
+        /**
+		 * Récupère les options à la commande
+         *
+         * @param Object opts
+		 * @return Promise
+		 */
+		getOptions: function(opts) {
+            var qs = opts || {};
+			return kiubi.get('cart/options', qs);
+		},
+        /**
+		 * Ajoute une option à la commande
+		 * 
+		 * @param Object items
+		 * @param Integer mode
+		 * @param Object opts
+		 * @return Promise
+		 */
+		addOption: function(id, value, opts) {
+			var qs = opts || {};
+			qs.value = value;
+			return kiubi.put('cart/options/'+id, qs);
+		},
+		/**
+		 * Supprime une option à la commande 
+		 * 
+		 * @param Integer id
+		 * @return Promise
+		 */
+		removeOption: function(id) {
+			return kiubi['delete']('cart/options/'+id);
 		},
 		/**
 		 * Récupère le bon de réduction
@@ -775,194 +1001,9 @@ kiubi = window.kiubi || {};
 	});
 })(jQuery, kiubi);
 /** 
- * API Catalog
- * 
- * Copyright 2018 Kiubi
- */
-(function($, kiubi) {
-	'use strict';
-	$.extend(kiubi.catalog, {
-		/**
-		 * Retourne la liste des produits
-		 * 
-		 * @param Object opts
-		 * @return Promise
-		 */
-		getProducts: function(opts) {
-			var qs = opts || {};
-			return kiubi.get('catalog/products', qs);
-		},
-		/**
-		 * Retourne la liste des produits d'une catégorie
-		 * 
-		 * @param Integer id
-		 * @param Object opts
-		 * @return Promise
-		 */
-		getProductsByCategory: function(id, opts) {
-			var qs = opts || {};
-			return kiubi.get('catalog/categories/'+id+'/products', qs);
-		},
-		/**
-		 * Retourne la liste des produits d'un ou plusieurs tag
-		 * 
-		 * @param String tags
-		 * @param Object opts
-		 * @return Promise
-		 */
-		getProductsByTags: function(tags, opts) {
-			var qs = opts || {};
-			qs.tags = tags;
-			return kiubi.get('catalog/products', qs);
-		},
-		/**
-		 * Retourne la liste des catégories
-		 * 
-		 * @param Object opts
-		 * @return Promise
-		 */
-		getCategories: function(opts) {
-			var qs = opts || {};
-			return kiubi.get('catalog/categories', qs);
-		},
-		/**
-		 * Retourne la liste des tags
-		 * 
-		 * @param Object opts
-		 * @return Promise
-		 */
-		getTags: function(opts) {
-			var qs = opts || {};
-			return kiubi.get('catalog/tags', qs);
-		},
-		/**
-		 * Retourne la liste des tags d'une catégorie
-		 * 
-		 * @param Integer id
-		 * @param Object opts
-		 * @return Promise
-		 */
-		getCategoryTags: function(id, opts) {
-			var qs = opts || {};
-			return kiubi.get('catalog/categories/'+id+'/tags', qs);
-		},
-		/**
-		 * Retourne la liste des commentaires
-		 * 
-		 * @param Object opts
-		 * @return Promise
-		 */
-		getComments: function(opts) {
-			var qs = opts || {};
-			return kiubi.get('catalog/comments', qs);
-		},
-		/**
-		 * Retourne le détail d'un produit
-		 * 
-		 * @param Integer id
-		 * @param Object opts
-		 * @return Promise
-		 */
-		getProduct: function(id, opts) {
-			var qs = opts || {};
-			return kiubi.get('catalog/products/'+id, qs);
-		},		
-		/**
-		 * Retourne la liste des commentaires d'un produits
-		 * 
-		 * @param Integer id
-		 * @param Object opts
-		 * @return Promise
-		 */
-		getProductComments: function(id, opts) {
-			var qs = opts || {};
-			return kiubi.get('catalog/products/'+id+'/comments', qs);
-		},
-		/**
-		 * Retourne un captcha pour un produit
-		 * 
-		 * @param Integer id
-		 * @return Promise
-		 */
-		getCaptcha: function(id) {
-			return kiubi.get('catalog/products/'+id+'/captcha');
-		},
-		/**
-		 * Poste un commentaire produit
-		 * 
-		 * @param Integer id
-		 * @param String comment
-		 * @param String author
-		 * @param String rate
-		 * @param String captcha
-		 * @param String consent
-		 * @return Promise
-		 */
-		addComment: function(id, comment, author, rate, captcha, consent) {
-			var qs = {id: id, comment: comment};
-			if(author) qs.author = author;
-			if(rate) qs.rate = rate;
-			if(captcha) qs.captcha = captcha;
-			if(consent) qs.consent = consent;
-			return kiubi.post('catalog/products/'+id+'/comments');
-		},
-		/**
-		 * Retourne la liste des produits associés à un produit
-		 * 
-		 * @param Integer id
-		 * @param Object opts
-		 * @return Promise
-		 */
-		getLinkedProducts: function(id, opts) {
-			var qs = opts || {};
-			return kiubi.get('catalog/products/'+id+'/linked', qs);
-		},
-		/**
-		 * Retourne la liste des produits également achetés d'un produit
-		 * 
-		 * @param Integer id
-		 * @param Object opts
-		 * @return Promise
-		 */
-		getAlsoBoughtProducts: function(id, opts) {
-			var qs = opts || {};
-			return kiubi.get('catalog/products/'+id+'/alsobought', qs);
-		},
-		/**
-		 * Retourne la liste des images d'un produit
-		 * 
-		 * @param Integer id
-		 * @param Object opts
-		 * @return Promise
-		 */
-		getProductImages: function(id, opts) {
-			var qs = opts || {};
-			return kiubi.get('catalog/products/'+id+'/images', qs);
-		},
-		/**
-		 * Retourne si un produit est disponible ou non
-		 * 
-		 * @param Integer id
-		 * @return Promise
-		 */
-		getProductAvailability: function(id) {
-			return kiubi.get('catalog/products/'+id+'/availability');
-		},
-		/**
-		 * Retourne si une variante est disponible ou non
-		 * 
-		 * @param Integer id
-		 * @return Promise
-		 */
-		getVariantAvailability: function(id) {
-			return kiubi.get('catalog/variants/'+id+'/availability');
-		}
-	});
-})(jQuery, kiubi);
-/** 
  * API CMS
  * 
- * Copyright 2013 Troll d'idees
+ * Copyright 2019 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -1026,7 +1067,7 @@ kiubi = window.kiubi || {};
 /** 
  * API Forms
  * 
- * Copyright 2018 Kiubi
+ * Copyright 2019 Kiubi
  */
 (function($, kiubi) {
 	
@@ -1161,32 +1202,58 @@ kiubi = window.kiubi || {};
 		 */
 		getFormCaptcha: function(key) {
 			return kiubi.get('forms/'+key+'/captcha');
-		},
-		/**
-		 * Retourne un captcha
-		 * 
-		 * @return Promise
-		 */
-		getCaptcha: function() {
-			return kiubi.get('forms/captcha');
-		},
-		/**
-		 * Valide un captcha
-		 * 
-		 * @param String key
-		 * @param String value
-		 * @return Promise
-		 */
-		submitCaptcha: function(key, value) {
-			return kiubi.put('forms/captcha', {key: key, value: value});
 		}
-		
+	});
+})(jQuery, kiubi);
+/** 
+ * API Geo
+ * 
+ * Copyright 2019 Kiubi
+ */
+(function($, kiubi) {
+	'use strict';
+	$.extend(kiubi.media, {
+        /**
+		 * Liste les pays
+		 * 
+		 * @return Promise
+		 */
+		getCountries: function() {
+			return kiubi.get('geo/countries');
+		},
+        /**
+		 * Détail d'un pays
+		 * 
+		 * @param Number|String id Identifiant ou code iso
+		 * @return Promise
+		 */
+		getCountry: function(id) {
+			return kiubi.get('geo/countries/'+id);
+		},
+        /**
+		 * Liste les régions d'un pays
+		 * 
+		 * @param Number id
+		 * @return Promise
+		 */
+		getRegions: function(id) {
+			return kiubi.get('geo/countries/'+id+'/regions');
+		},
+        /**
+		 * Liste les départements d'un pays
+		 * 
+		 * @param Number id
+		 * @return Promise
+		 */
+		getDepartements: function(id) {
+			return kiubi.get('geo/countries/'+id+'/departements');
+		}
 	});
 })(jQuery, kiubi);
 /** 
  * API Media
  * 
- * Copyright 2013 Troll d'idees
+ * Copyright 2019 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -1216,7 +1283,7 @@ kiubi = window.kiubi || {};
 /** 
  * API Newsletter
  * 
- * Copyright 2018 Kiubi
+ * Copyright 2019 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -1248,7 +1315,7 @@ kiubi = window.kiubi || {};
 /** 
  * API Preferences
  * 
- * Copyright 2013 Troll d'idees
+ * Copyright 2019 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -1290,7 +1357,7 @@ kiubi = window.kiubi || {};
 /** 
  * API Search
  * 
- * Copyright 2013 Troll d'idees
+ * Copyright 2019 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -1337,7 +1404,7 @@ kiubi = window.kiubi || {};
 /** 
  * API Users
  * 
- * Copyright 2013 Troll d'idees
+ * Copyright 2019 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -1369,15 +1436,16 @@ kiubi = window.kiubi || {};
 		getOrders: function(id) {
 			return kiubi.get('users/'+id+'/orders');
 		},
-		
 		/**
 		 * Retourne le détail d'une commande
 		 * 
 		 * @param Integer id
+         * @param Object opts
 		 * @return Promise
 		 */
-		getOrder: function(id) {
-			return kiubi.get('orders/'+id);
+		getOrder: function(id, opts) {
+            var qs = opts || {};
+			return kiubi.get('orders/'+id, qs);
 		}
 		
 	});

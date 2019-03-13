@@ -21,8 +21,6 @@ L'accès au sandbox est privé et nécessite un compte back-office. Seul le lien
 
 *Le thème Bootstrap fournit par Kiubi intègre jQuery 3.2.1*	
 
-*Le thème Shiroi fournit par Kiubi intègre jQuery 1.8.2*	
-
 ## Déploiement
 
 La librairie doit être inclue dans les templates de page du thème, après l'inclusion de jQuery, afin de pouvoir utiliser l'API de façon globale ou directement dans un widget :
@@ -162,13 +160,13 @@ Voici par service la liste des méthodes disponibles dans le client JS :
 
 ## Exemples
 
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-	<script type="text/javascript" src="{cdn}/js/kiubi.api.pfo.jquery-1.1.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript" src="{cdn}/js/kiubi.api.pfo.jquery-1.2.min.js"></script>
 	<script type="text/javascript">
 		jQuery(function($){
 		
 			// Vérification de l'état connecté du visiteur
-			var query = kiubi.session();
+			var query = kiubi.getSession();
 			query.done(function(meta, data){
 				if(data.is_logged) {
 					alert('Membre connecté');
@@ -184,7 +182,7 @@ Voici par service la liste des méthodes disponibles dans le client JS :
 			});
 			query.fail(function(meta, error, data){
 				if(meta.status_code == 404) {
-					alert("Le produit 7 n'existe pas : " + error.message);
+					alert("Le produit n'existe pas : " + error.message);
 				}
 			});
 		});

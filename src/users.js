@@ -1,7 +1,7 @@
 /** 
  * API Users
  * 
- * Copyright 2013 Troll d'idees
+ * Copyright 2019 Kiubi
  */
 (function($, kiubi) {
 	'use strict';
@@ -33,15 +33,16 @@
 		getOrders: function(id) {
 			return kiubi.get('users/'+id+'/orders');
 		},
-		
 		/**
 		 * Retourne le détail d'une commande
 		 * 
 		 * @param Integer id
+         * @param Object opts
 		 * @return Promise
 		 */
-		getOrder: function(id) {
-			return kiubi.get('orders/'+id);
+		getOrder: function(id, opts) {
+            var qs = opts || {};
+			return kiubi.get('orders/'+id, qs);
 		}
 		
 	});

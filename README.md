@@ -48,6 +48,7 @@ La librarie comprend un ensemble de méthodes facilitant l'appel aux différents
 * kiubi.prefs : Permet de récupérer les préféfences du site
 * kiubi.search : Permet de faire des recherches dans le blog, le catalogue et le cms
 * kiubi.forms : Permet de récupérer un formulaire Dismoi et d'envoyer des réponses
+* kiubi.geo : Aides pour l'affichage d'informations géographiques
 * kiubi.cms : Permet de récupérer les pages et leurs contenus
 * kiubi.blog : Permet de récupérer les billets du blog
 * kiubi.cart : Permet de gérer le panier de l'utilisateur
@@ -65,6 +66,7 @@ Voici par service la liste des méthodes disponibles dans le client JS :
     - delete(endpoint, params) : Effectue une requête de type DELETE
     - login(login, password) : Effectue une connexion d'un utilisateur
     - logout() : Effectue une déconnexion de l'utilisateur courant
+	- getSession() : Vérifie la validité de la session et retourne les informations de l'utilisateur connecté
     - getFirstPage(meta) : Parse la première page d'une liste de résultats
     - getPreviousPage(meta) : Parse la page précédente d'une liste de résultats
     - getNextPage(meta) : Parse la page suivante d'une liste de résultats
@@ -85,7 +87,7 @@ Voici par service la liste des méthodes disponibles dans le client JS :
     - getPostsByCategoryAndYear(id, year, opts) : Retourne la liste des billets d'une catégorie d'une année
     - getPostsByCategoryAndMonth(id, year, month, opts) : Retourne la liste des billets d'une catégorie d'un mois
     - getPostsByCategoryAndDay(id, year, month, day, opts) : Retourne la liste des billets d'une catégorie d'un jour
-    - getArchives(opts) : Retourne la liste liste des archives
+    - getArchives() : Retourne la liste liste des archives
     - getPost(id) : Retourne le détail d'un billet
     - getCaptcha(id) : Retourne un captcha pour un billet
     - getComments(opts) : Retourne la liste des commmentaires
@@ -100,6 +102,9 @@ Voici par service la liste des méthodes disponibles dans le client JS :
     - getVoucher() : Récupère le bon de réduction
     - removeVoucher() : Retire le bon de réduction
     - addVoucher(code, opts) : Ajout un bon de réduction
+	- getOptions(opts) : Récupère les options à la commande
+	- addOption(id, value, opts) : Ajoute une option à la commande
+	- removeOption(id) : Supprime une option à la commande 
     - backup() : Récupère une sauvegarde du panier
     - restore(backup) : Restaure une sauvegarde du panier
     - getCarriers() : Retourne la liste des transporteurs disponibles
@@ -134,8 +139,11 @@ Voici par service la liste des méthodes disponibles dans le client JS :
     - get(key) : Retourne la liste des champs d'un formulaire Dismoi
     - submit(key, form) : Poste une réponse à un formulaire Dismoi
     - getFormCaptcha(key) : Retourne un captcha pour un formulaire Dismoi
-    - getCaptcha() : Retourne un captcha
-    - submitCaptcha(key, value) : Valide un captcha
+- kiubi.geo
+    - getCountries() : Liste les pays
+    - getCountry(id) : Détail d'un pays
+    - getRegions(id) : Liste les régions d'un pays
+    - getDepartements(id) : Liste les départements d'un pays
 - kiubi.media
     - getFiles(key, opts) : Retourne la liste des médias d'un dossier
     - getFile(id) : Retourne le détail d'un média
@@ -155,7 +163,7 @@ Voici par service la liste des méthodes disponibles dans le client JS :
     - getInfos(id) : Retourne les informations de l'utilisateur
     - getAddresses(id) : Retourne les addresses de facturation et livraison de l'utilisateur
     - getOrders(id) : Retourne la liste des commandes de l'utlisateur
-    - getOrder(id) : Retourne le détail d'une commande 
+    - getOrder(id, opts) : Retourne le détail d'une commande 
 
 
 ## Exemples
@@ -166,8 +174,7 @@ Voici par service la liste des méthodes disponibles dans le client JS :
 		jQuery(function($){
 		
 			// Vérification de l'état connecté du visiteur
-			var query = kiubi.getSession();
-			query.done(function(meta, data){
+			var query = kiubi.getSession().done(function(meta, data){
 				if(data.is_logged) {
 					alert('Membre connecté');
 				} else {
@@ -176,11 +183,9 @@ Voici par service la liste des méthodes disponibles dans le client JS :
 			});
 			
 			// Récupération d'un produit du catalogue
-			var query = kiubi.catalog.getProduct(7);
-			query.done(function(meta, data){
+			var query = kiubi.catalog.getProduct(7).done(function(meta, data){
 				alert("Le produit " + data.name + " existe !");
-			});
-			query.fail(function(meta, error, data){
+			}).fail(function(meta, error, data){
 				if(meta.status_code == 404) {
 					alert("Le produit n'existe pas : " + error.message);
 				}

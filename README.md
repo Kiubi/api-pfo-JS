@@ -3,9 +3,9 @@
 
 ## Description
 
-La plateforme [Kiubi](http://www.kiubi.com) offre une API publique front-office pour chacun de ses sites web. Cette API permet de requêter dynamiquement le contenu d'un site afin de rajouter des fonctionnalités sur celui-ci et proposer aux visiteurs un contenu plus riche et plus fonctionnel.
+La plateforme [Kiubi](http://www.kiubi.com) offre une API publique front-office ( *API FO* ) pour chacun de ses sites web. Cette API permet de requêter dynamiquement le contenu d'un site afin de rajouter des fonctionnalités sur celui-ci et proposer aux visiteurs un contenu plus riche et plus fonctionnel.
 
-L'API Kiubi est une API de type REST avec en sortie des données au format JSON. Afin de faciliter son utilisation, Kiubi propose une librairie javascript complète permettant la récupération des données via l'API de façon simple et optimisé.
+L'API FO est de type REST avec en sortie des données au format JSON. Afin de faciliter son utilisation, Kiubi propose une librairie javascript complète permettant la récupération des données via l'API de façon simple et optimisé. Pour en savoir plus, vous pouvez [consulter la documentation en ligne](https://aide.kiubi.com/api-front-generalites.html).
 
 
 ## Sandbox
@@ -19,16 +19,17 @@ L'accès au sandbox est privé et nécessite un compte back-office. Seul le lien
 
 - jQuery >= 1.8.2
 
-*Le thème Bootstrap fournit par Kiubi intègre jQuery 3.2.1*	
+*Le thème Bootstrap4 fourni par Kiubi intègre jQuery 3.2.1*	
 
 ## Déploiement
 
 La librairie doit être inclue dans les templates de page du thème, après l'inclusion de jQuery, afin de pouvoir utiliser l'API de façon globale ou directement dans un widget :
 
-	<script type="text/javascript" src="{cdn}/js/kiubi.api.pfo.jquery-1.1.min.js"></script>
+	<script type="text/javascript" src="{cdn}/js/kiubi.api.pfo.jquery-1.2.min.js"></script>
 	
-La balise `{cdn}` affiche l'url du du CDN de la plateforme.
-	
+La librairie est mise à disposition sur le CDN de la plateforme. Le domaine du CDN est récupérable automatiquement avec la balise `{cdn}`.
+
+
 ## Utilisation
 
 Une fois la librairie inclue, un objet javascript `kiubi` est disponible et permet d'utiliser l'ensemble des fonctionnalités de l'API.
@@ -36,9 +37,6 @@ Une fois la librairie inclue, un objet javascript `kiubi` est disponible et perm
 Les méthodes disponibles retourne un objet `Promise` issu d'un objet `Deferred`. Cette méthode asynchrone permet de gérer facilements un ou plusieurs callbacks sur chaque appel à l'API. 
 
 La librarie comprend un ensemble de méthodes facilitant l'appel aux différents endpoints de l'API. Ces méthodes sont classées par service.
-
-
-## Liste des services
 
 * kiubi : Objet principal, permet la gestion élémentaire du requêtage de l'api
 * kiubi.media : Permet de récupérer les médias de la médiathèque
@@ -52,6 +50,10 @@ La librarie comprend un ensemble de méthodes facilitant l'appel aux différents
 * kiubi.cms : Permet de récupérer les pages et leurs contenus
 * kiubi.blog : Permet de récupérer les billets du blog
 * kiubi.cart : Permet de gérer le panier de l'utilisateur
+
+Les sources de chaque service sont disponibles séparement dans le dossier `src`.
+
+Le dossier `dist` contient les versions aggrégées et minifiées de tous les services.
 
 
 ## Méthodes disponibles
@@ -168,7 +170,7 @@ Voici par service la liste des méthodes disponibles dans le client JS :
 
 ## Exemples
 
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script type="text/javascript" src="{cdn}/js/kiubi.api.pfo.jquery-1.2.min.js"></script>
 	<script type="text/javascript">
 		jQuery(function($){
